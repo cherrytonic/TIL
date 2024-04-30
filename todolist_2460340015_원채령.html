@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+
+    .container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        text-align: center;
+    }
+
+    .input-box {
+        margin-bottom: 20px;
+    }
+
+    .input-box input[type="text"] {
+        width: 70%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+    }
+
+    button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    button:hover {
+        background-color: #0056b3;
+    }
+    #delete {
+        padding: 10px 20px;
+        background-color: #ff0000;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    #delete:hover {
+        background-color: #b30000;
+    }
+    li {
+        margin-bottom: 10px;
+    }
+    span {
+        margin-right: 10px;
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>TODO LIST</h2>
+        <div class="input-box">
+            <input type="text" id="input">
+            <button id="btn">할 일 추가</button>
+        </div>
+        <ul id="todo"></ul>
+        <button id="delete">모두삭제</button>
+    </div>
+</body>
+<script>
+    const input = document.getElementById('input')
+    const savedTodoList = JSON.parse(localStorage.getItem('saved-items'));
+    btn.addEventListener('click', () => { // + 버튼으로 추가
+        if(input.value !== ''){ // 빈 값 입력 방지
+            addTodo();
+        }
+    })
+    input.addEventListener('keyup', () => {
+        if(window.event.keyCode === 13 && input.value !== ''){
+            addTodo();
+        }
+    })
+    // 새로 웹페이지를 열때 로컬스토리지 로드하기
+    document.addEventListener('DOMContentLoaded', function() {
+    const savedTodoList = JSON.parse(localStorage.getItem('saved-items'));
+    if (savedTodoList) {
+        savedTodoList.forEach(function(item) {
+            const newTodo = document.createElement('li');
+            const newText = document.createElement('span');
+            const newButton = document.createElement('button');
+            newText.textContent = item.contents;
+            newButton.textContent = '삭제';
+            newButton.addEventListener('click', function() {
+                newTodo.parentNode.removeChild(newTodo);
+                const todoContent = newText.textContent
+                console.log(todoContent);
+                deleteTodo(todoContent);
+            });
+            newTodo.appendChild(newText);
+            newTodo.appendChild(newButton);
+            document.getElementById('todo').appendChild(newTodo);
+            });
+        }
+    });
+    // todo 추가(삭제 포함)
+    function addTodo() {
+        const newTodo = document.createElement('li')
+        const newText = document.createElement('span')
+        const newButton = document.createElement('button')
+        newTodo.appendChild(newText)
+        newTodo.appendChild(newButton)
+        newText.textContent = input.value
+        newButton.textContent = '삭제'
+        // html에서 삭제
+        newButton.addEventListener('click', (e) => {
+            event.currentTarget.parentNode.parentNode.removeChild(event.currentTarget.parentNode)
+        })
+        todo.appendChild(newTodo)
+        input.value = ''
+        saveTodo()
+    }
+    // 추가된 todo를 로컬스토리지에 반영
+    function saveTodo() {
+        const saveItems = []
+        for (let i = 0; i <todo.children.length;i++) {
+            const save = {
+                contents: todo.children[i].querySelector('span').textContent
+            }
+            saveItems.push(save)
+        }
+        localStorage.setItem('saved-items', JSON.stringify(saveItems));
+        
+    }
+    // 로컬 스토리지에서 삭제
+    // 로컬 스토리지 아이템을 불러온뒤, todoContent와 일치하지 않는 item만 남긴다
+    function deleteTodo(todoContent) { // todoContent는 삭제할 todo의 내용
+        const savedTodoList = JSON.parse(localStorage.getItem('saved-items'));
+        if (savedTodoList) {
+            const updatedTodoList = savedTodoList.filter(function(item) {
+                return item.contents !== todoContent;
+            });
+            localStorage.setItem('saved-items', JSON.stringify(updatedTodoList));
+        }
+    }
+    // 전체삭제
+    const deleteAll = document.getElementById('delete')
+    deleteAll.addEventListener('click', (e) => {
+        console.log('삭제');
+        localStorage.removeItem('saved-items')
+        const todo = document.getElementById('todo');
+        todo.innerHTML = ''
+    })
+</script>
+</html>

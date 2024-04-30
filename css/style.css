@@ -1,0 +1,70 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: white;
+    padding: 10px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    width: 50px;
+    height: auto;
+}
+
+.brand-name {
+    margin-left: 10px;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+}
+
+nav ul li {
+    margin-right: 20px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+nav ul li a:hover {
+    color: #ffcc00;
+}
+
+.navbar li {
+    margin-right: 20px;
+    position: relative; /* 부모 요소로 지정 */
+}
+
+.dropdown-menu {
+    display: none; /* 초기에는 보이지 않음 */
+    position: absolute;
+    top: 100%; /* 부모의 아래에 배치 */
+    left: 0;
+    background-color: gray;
+    padding: 10px;
+}
+
+
+.navbar li a {
+    color: white;
+    text-decoration: none;
+}
+
+.navbar li a:hover {
+    color: yellow;
+}
