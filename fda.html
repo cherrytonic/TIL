@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="quiz-container"></div>
+</body>
+<script>
+    let quizzes = []
+    console.log('하자');
+    // Fetch API를 사용해 aaa.json 파일을 읽어옵니다.
+    fetch('https://jwonchi.github.io/kopoclass/JSON/quiz.json')
+    .then(response => {
+        // JSON 형태로 응답을 변환합니다.
+        return response.json();
+        console.log(response);
+    })
+    .then(data => {
+        // data가 1 이상인 경우 퀴즈 만드는 함수를 호출한다. 
+        if(data.quizzes.length > 0){
+            console.log(data.quizzes)
+            quizzes = data.quizzes
+            console.log(quizzes);
+            const quizContainer = document.getElementById('quiz-container');
+                // 각 퀴즈 데이터를 순회하면서 HTML에 추가
+            quizzes.forEach((quiz, index) => {
+                const questionElement = document.createElement('div');
+                questionElement.classList.add('quiz-question');
+                questionElement.innerHTML = `<h3>${index + 1}. ${quiz.question}</h3>`;
+                const optionsList = document.createElement('ol');
+                optionsList.classList.add('quiz-options');
+                Object.keys(quiz.options).forEach(optionKey => {
+                    const optionElement = document.createElement('li');
+                    optionElement.innerHTML = `
+                        <label>
+                            ${quiz.options[optionKey]}
+                            <input type="radio" name="quiz-${index}" value="${optionKey}">
+                        </label>
+                    `;
+                    optionsList.appendChild(optionElement);
+                });
+                questionElement.appendChild(optionsList);
+                quizContainer.appendChild(questionElement);
+            });
+        }
+        console.debug(`data.quizzes.length : ${data.quizzes.length}`);
+    })
+    .catch(error => {
+        console.error('파일을 읽는 중 오류 발생:', error);
+    });
+    
+</script>
+</html>
